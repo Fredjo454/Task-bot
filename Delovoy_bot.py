@@ -3,6 +3,8 @@ from telebot import types
 bot = telebot.TeleBot("7947822600:AAGBjT2EmsYRpTounnQet5Rwv0tNzARKRQ4")
 Spisok = "Здесь будут задачи"
 toollist = []
+daylist = ["Понедельник", "Вторник", "Среда", "Четверг", "Пятница", "Суббота", "Воскресенье"]
+
 
 
 class New_Task:
@@ -32,11 +34,21 @@ def send_Answer(message):
         
 
     elif user_Text == "список дел":
-        bot.send_message(message.chat.id, f"Список задач на ближайшее время\nSpisok")
+        text_list = ""
+        if len(toollist) == 0:
+            text_list = "Ваш список пока что пуст"
+        for i, task in enumerate(toollist):
+            text_list += f"Ваши задачи на ближайшее время:\n задача {i + 1} {task.text}\n"
+        bot.send_message(message.chat.id, text_list)
     else:
         new_Task_Name = message.text
         new_Task = New_Task(new_Task_Name)
-        toollist.append(new_Task_Name)
+        toollist.append(new_Task)
         bot.send_message(message.chat.id, f"Добавлена задача {new_Task.text}")
+        keyboard = types.InlineKeyboardMarkup()
+        for i in daylist:
+            daybtn = types.InlineKeyboardButton(f"{i}", callback_data = i)
+            keyboard.add(daybtn)
+        bot.send_message(message.chat.id, "Выберите день недели", reply_markup = keyboard)
 
 bot.polling(non_stop = True, interval = 0)
