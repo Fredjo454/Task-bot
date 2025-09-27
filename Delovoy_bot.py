@@ -1,6 +1,6 @@
 import telebot
 from telebot import types
-bot = telebot.TeleBot("7947822600:AAGBjT2EmsYRpTounnQet5Rwv0tNzARKRQ4")
+bot = telebot.TeleBot("dd")
 Spisok = "Здесь будут задачи"
 toollist = []
 daylist = ["Понедельник", "Вторник", "Среда", "Четверг", "Пятница", "Суббота", "Воскресенье"]
