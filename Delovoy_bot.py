@@ -5,10 +5,10 @@ from telebot import types
 import datetime
 import time as wait
 import threading
-bot = telebot.TeleBot("7947822600:AAGZvbWR11xPppVrV4UKzV41DNB-mEWz0N0")
+bot = telebot.TeleBot("")
 =======
 bot = telebot.TeleBot("dd")
->>>>>>> c70f1d7b9e5701b2d0da013e1b839d63b8c80a6c
+>>>>>>> 
 Spisok = "Здесь будут задачи"
 chatstoollist = {}
 JSONNAME = "files.json"
@@ -271,4 +271,4 @@ startThread()
 bot.polling(non_stop = True, interval = 0)
 =======
 bot.polling(non_stop = True, interval = 0)
->>>>>>> c70f1d7b9e5701b2d0da013e1b839d63b8c80a6c
+>>>>>>> 
