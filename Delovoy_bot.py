@@ -1,7 +1,9 @@
 import telebot
 import json
 from telebot import types
+import datetime
 import time as wait
+import threading
 bot = telebot.TeleBot("7947822600:AAGZvbWR11xPppVrV4UKzV41DNB-mEWz0N0")
 Spisok = "Здесь будут задачи"
 chatstoollist = {}
@@ -19,6 +21,53 @@ class New_Task:
         self.time = time
         self.day = day
         self.message_id = 0
+
+
+
+def get_data (day_Name):
+    if not day_Name:
+        return None
+    weekday = wait.localtime().tm_wday
+    
+    daymapping = {"Понедельник": 0, "Вторник": 1, "Среда": 2, "Четверг": 3, "Пятница": 4, "Суббота": 5, "Воскресенье": 6}
+    if day_Name in daymapping:
+        targetday = daymapping[day_Name]
+        daysDeadline = targetday - weekday
+        if daysDeadline < 0:
+            daysDeadline += 7
+        
+        return daysDeadline
+    return None
+def check ():
+    while True:
+        try:
+            chatstoollist = jsonread()
+
+            for chatid, toollist in chatstoollist.items() :
+                for task in toollist:
+                    if task.day:
+                        due_date = get_data(task.day)
+                        if due_date:
+                            daysUntil = get_data(task.day)
+                            if daysUntil == 1:
+                                chatidday = int(chatid)
+                                message = f"В {task.day} нужно сделать {task.text} "
+                                if task.time:
+                                    message += f"Время {task.time}"
+                                    try:
+                                        bot.send_message(chatidday, message)
+                                    except Exception as e:
+                                        print(e)
+            wait.sleep(3600)
+        except Exception as e:
+            print(e) 
+            wait.sleep(300)  
+
+def startThread ():
+    Thread = threading.Thread(target = check)
+    Thread.daemon = True
+    Thread.start()                         
+
 def encode_task (task):
     return {"type":"Task", "id": task.id, "text": task.text, "time": task.time, "day": task.day, "message_id": task.message_id}
 
@@ -213,5 +262,5 @@ def send_Answer(message):
         bot.send_message(message.chat.id, "Выберите время", reply_markup = hour_keyboard(new_Task.id))
     print(message.chat.id)
 
-
+startThread()
 bot.polling(non_stop = True, interval = 0)
